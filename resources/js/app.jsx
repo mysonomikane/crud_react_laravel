@@ -5,7 +5,7 @@ import  {BrowserRouter, Routes, Route} from "react-router-dom";
 import Tasks from "./components/tasks/Tasks";
 import Create from "./components/tasks/Create";
 import Edit from "./components/tasks/Edit";
-import Header from "./components/Header>";
+import Header from "./components/Header";
 
 ReactDOM.createRoot(document.getElementById("app")).render(
     <div className="row">
@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById("app")).render(
             <BrowserRouter>
                 <Header />
                 <Routes>
-                    <Route path="/" exact element={<Header />} />
+                    <Route path="/" exact element={<Tasks />} />
                     <Route path="/create" exact element={<Create />} />
                     <Route path="/edit/:taskId" exact element={<Edit />} />
                 </Routes>
