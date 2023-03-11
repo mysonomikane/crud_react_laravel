@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Category;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -12,7 +14,7 @@ class TaskController extends Controller
         return Task::with('category')->paginate(10);
     }
 
-    public function store(Request $request){
+    public function store(CreateTaskRequest $request){
         $task = Task::create([
             'title' => $request->title,
             'body' => $request->body,
@@ -23,9 +25,9 @@ class TaskController extends Controller
 
     public function show(Task $task){
         return $task;
-    };
+    }
 
-    public function update(Request $request, Task $task){
+    public function update(UpdateTaskRequest $request, Task $task){
         $task->update([
             'title' => $request->title,
             'body' => $request->body,
