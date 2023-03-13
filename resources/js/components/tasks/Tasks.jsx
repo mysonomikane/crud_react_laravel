@@ -18,6 +18,20 @@ export default function Tasks() {
         }
     }
 
+    const renderPagination = () => (
+        <ul className="pagination">
+            {
+                tasks.links?.map((link, index) => (
+                    <li key={index} className={`page-item ${link.active ? 'active' : ''}`}>
+                        <a href="" className="page-link">
+                            {link.label.replace('&laquo;', '').replace('&raquo;', '')}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    )
+
     const checkIfTaskIsDone = (done) => (
         done ? (
             <span className="badge bg-success">
@@ -64,6 +78,12 @@ export default function Tasks() {
                             }
                             </tbody>
                         </table>
+                        <div className="my-4 d-flex justify-content-between">
+                            <div></div>
+                            <div>
+                                {renderPagination()}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
