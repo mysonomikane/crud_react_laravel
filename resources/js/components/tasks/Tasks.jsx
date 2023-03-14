@@ -4,18 +4,24 @@ import axios from "axios";
 export default function Tasks() {
     const [tasks, setTasks] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetchTasks();
-    }, []);
+    }, [page]);
 
     const fetchTasks = async () => {
         try {
-            const response = await axios.get('/api/tasks');
+            const response = await axios.get(`/api/tasks?page=${page}`);
             setTasks(response.data);
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const fetchPrevNextTasks = (link) => {
+        const url = new URL(link);
+        setPage(url.searchParams.get('page'));
     }
 
     const renderPagination = () => (
@@ -23,7 +29,10 @@ export default function Tasks() {
             {
                 tasks.links?.map((link, index) => (
                     <li key={index} className={`page-item ${link.active ? 'active' : ''}`}>
-                        <a href="" className="page-link">
+                        <a href="#"
+                           style={{cursor: 'pointer'}}
+                           onClick={() => fetchPrevNextTasks(link.url)}
+                           className="page-link">
                             {link.label.replace('&laquo;', '').replace('&raquo;', '')}
                         </a>
                     </li>
@@ -79,7 +88,9 @@ export default function Tasks() {
                             </tbody>
                         </table>
                         <div className="my-4 d-flex justify-content-between">
-                            <div></div>
+                            <div>
+                                Showing {tasks.from || 0} to {tasks.to || 0} from {tasks.total} results.
+                            </div>
                             <div>
                                 {renderPagination()}
                             </div>
