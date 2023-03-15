@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,3 +27,4 @@ Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
 Route::get('category/{category}/tasks', [TaskController::class, 'getTaskByCategory']);
 Route::get('search/{term}/tasks', [TaskController::class, 'getTasksByTerm']);
 Route::get('order/{column}/{direction}/tasks', [TaskController::class, 'getTasksOrderBy']);
+Route::get('categories', [CategoryController::class, 'index']);

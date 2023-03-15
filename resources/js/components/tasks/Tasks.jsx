@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import useCategories from "../../custom/useCategories";
 
 export default function Tasks() {
     const [tasks, setTasks] = useState([]);
@@ -7,7 +8,12 @@ export default function Tasks() {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        fetchTasks();
+        if(!categories.length){
+            fetchCategories();
+        }
+        if(!tasks.length){
+            fetchTasks();
+        }
     }, [page]);
 
     const fetchTasks = async () => {
@@ -22,6 +28,11 @@ export default function Tasks() {
     const fetchPrevNextTasks = (link) => {
         const url = new URL(link);
         setPage(url.searchParams.get('page'));
+    }
+
+    const fetchCategories = async () => {
+        const fetchedCategories = await useCategories();
+        setCategories(fetchedCategories);
     }
 
     const renderPagination = () => (
