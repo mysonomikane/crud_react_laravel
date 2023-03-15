@@ -109,6 +109,40 @@ export default function Tasks() {
                     </div>
                 </div>
             </div>
+            <div className="col-md-3">
+                <div className="card">
+                    <div className="card-header text-center bg-white">
+                        <h5 className="mt-2">Filter bu category</h5>
+                    </div>
+                    <div className="card-body">
+                        <div className="form-check">
+                            <input type="radio" className="form-check-input" name="category"
+                                onChange={()=>{
+                                    setPage(1);
+                                    fetchTasks();
+                                }} />
+                            <label htmlFor="category" className="form-check-label">All</label>
+                        </div>
+                        {
+                            categories?.map(category => (
+                                <div className="form-check">
+                                    <input type="radio" className="form-check-input" name="category"
+                                           onChange={() => {
+                                               setPage(1);
+                                               fetchTasks();
+                                           }}
+                                           value={category.id}
+                                           id={category.id}
+                                    />
+                                    <label htmlFor={category.id} className="form-check-label">
+                                        {category.name}
+                                    </label>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
