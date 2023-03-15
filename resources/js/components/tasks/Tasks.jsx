@@ -6,6 +6,7 @@ export default function Tasks() {
     const [tasks, setTasks] = useState([]);
     const [categories, setCategories] = useState([]);
     const [page, setPage] = useState(1);
+    const [catId, setCatId] = useState(null);
 
     useEffect(() => {
         if(!categories.length){
@@ -14,12 +15,17 @@ export default function Tasks() {
         if(!tasks.length){
             fetchTasks();
         }
-    }, [page]);
+    }, [page, catId]);
 
-    const fetchTasks = async () => {
+    const fetchTasks = async ()  => {
         try {
-            const response = await axios.get(`/api/tasks?page=${page}`);
-            setTasks(response.data);
+            if(catId){
+                const response = await axios.get(`/api/category/${catId}/tasks?page=${page}`);
+                setTasks(response.data);
+            }else{
+                const response = await axios.get(`/api/tasks?page=${page}`);
+                setTasks(response.data);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -27,11 +33,12 @@ export default function Tasks() {
 
     const fetchPrevNextTasks = (link) => {
         const url = new URL(link);
-        setPage(url.searchParams.get('page'));
+        setPage(parseInt(url.searchParams.get('page')));
     }
 
     const fetchCategories = async () => {
         const fetchedCategories = await useCategories();
+        console.log('hi'+fetchedCategories);
         setCategories(fetchedCategories);
     }
 
@@ -112,14 +119,14 @@ export default function Tasks() {
             <div className="col-md-3">
                 <div className="card">
                     <div className="card-header text-center bg-white">
-                        <h5 className="mt-2">Filter bu category</h5>
+                        <h5 className="mt-2">Filter by category</h5>
                     </div>
                     <div className="card-body">
                         <div className="form-check">
                             <input type="radio" className="form-check-input" name="category"
                                 onChange={()=>{
                                     setPage(1);
-                                    fetchTasks();
+                                    setCatId(null);
                                 }} />
                             <label htmlFor="category" className="form-check-label">All</label>
                         </div>
@@ -129,7 +136,7 @@ export default function Tasks() {
                                     <input type="radio" className="form-check-input" name="category"
                                            onChange={() => {
                                                setPage(1);
-                                               fetchTasks();
+                                               setCatId(event.target.value);
                                            }}
                                            value={category.id}
                                            id={category.id}

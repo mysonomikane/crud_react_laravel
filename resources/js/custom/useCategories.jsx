@@ -9,4 +9,4 @@ const useCategories = async () => {
     }
 }
 
-export default useCategories();
+export default useCategories;

@@ -43,7 +43,7 @@ class TaskController extends Controller
     }
 
     public function getTaskByCategory(Category $category){
-        return $category->tasks()->with('category')->paginate(10);
+        return $category->tasks()->with('category')->paginate(2);
     }
 
     public function getTasksOrderBy($column, $direction){
