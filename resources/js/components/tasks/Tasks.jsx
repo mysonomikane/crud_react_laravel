@@ -7,6 +7,7 @@ export default function Tasks() {
     const [categories, setCategories] = useState([]);
     const [page, setPage] = useState(1);
     const [catId, setCatId] = useState(null);
+    const [orderBy, setOrderBy] = useState(null);
 
     useEffect(() => {
         if(!categories.length){
@@ -15,12 +16,15 @@ export default function Tasks() {
         if(!tasks.length){
             fetchTasks();
         }
-    }, [page, catId]);
+    }, [page, catId, orderBy]);
 
     const fetchTasks = async ()  => {
         try {
             if(catId){
                 const response = await axios.get(`/api/category/${catId}/tasks?page=${page}`);
+                setTasks(response.data);
+            }else if(orderBy){
+                const response = await axios.get(`/api/order/${orderBy.column}/${orderBy.direction}/tasks?page=${page}`);
                 setTasks(response.data);
             }else{
                 const response = await axios.get(`/api/tasks?page=${page}`);
@@ -127,7 +131,7 @@ export default function Tasks() {
                                 onChange={()=>{
                                     setPage(1);
                                     setCatId(null);
-                                }} />
+                                }}  checked={!catId ? true : false} />
                             <label htmlFor="category" className="form-check-label">All</label>
                         </div>
                         {
@@ -147,6 +151,48 @@ export default function Tasks() {
                                 </div>
                             ))
                         }
+                    </div>
+                </div>
+                <div className="card mt-2">
+                    <div className="card-header text-center bg-white">
+                        <h5 className="mt-2">
+                            Order by
+                        </h5>
+                    </div>
+                    <div className="card-body">
+                        <div>
+                            <h6>ID</h6>
+                            <div className="form-check">
+                                <input type="radio" className="form-check-input" name="id"
+                                       value="asc"
+                                       onChange={(event)=>{
+                                           setPage(1);
+                                           setCatId(null);
+                                            setOrderBy({
+                                                column: 'id',
+                                                direction: event.target.value
+                                            });
+                                       }} checked={!catId ? true : false} />
+                                <label htmlFor="id" className="form-check-label">
+                                    <i className="fas fa-arrow-up"></i>
+                                </label>
+                            </div>
+                            <div className="form-check">
+                                <input type="radio" className="form-check-input" name="id"
+                                       value="desc"
+                                       onChange={(event)=>{
+                                           setPage(1);
+                                           setCatId(null);
+                                           setOrderBy({
+                                               column: 'id',
+                                               direction: event.target.value
+                                           });
+                                       }}  />
+                                <label htmlFor="id" className="form-check-label">
+                                    <i className="fas fa-arrow-down"></i>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
